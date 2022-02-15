@@ -21,7 +21,7 @@ Vagrant.configure(2) do |config|
     node.vm.provider :virtualbox do |v|
       v.name    = "k3s1"
       v.memory  = 2048
-      v.cpus    =  2
+      v.cpus    = 2
     end
 
     node.vm.provision "shell", path: "bootstrap_kmaster.sh"
