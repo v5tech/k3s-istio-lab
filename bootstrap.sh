@@ -73,24 +73,17 @@ mv k3s-airgap-images-amd64.tar /var/lib/rancher/k3s/agent/images/
 curl -sfL https://get.k3s.io -o /opt/k3s/install.sh
 chmod +x /opt/k3s/install.sh
 
+# echo "[TASK 10] Config k3s registry"
 
-echo "[TASK 10] Config k3s registry"
-
-sudo mkdir -p /etc/rancher/k3s
-sudo cat >> /etc/rancher/k3s/registries.yaml <<EOF
-mirrors:
-  "docker.io":
-    endpoint:
-      - "https://8bfcfsp1.mirror.aliyuncs.com"
-      - "https://bqr1dr1n.mirror.aliyuncs.com"
-      - "https://rw21enj1.mirror.aliyuncs.com"
-      - "https://vzv3mvs2.mirror.aliyuncs.com"
-      - "https://z82hcd5r.mirror.aliyuncs.com"
-      - "https://registry.cn-hangzhou.aliyuncs.com"
-      - "https://docker.mirrors.ustc.edu.cn"
-      - "https://dockerhub.azk8s.cn"
-      - "https://quay.mirrors.ustc.edu.cn"
-      - "https://quay.azk8s.cn"
-      - "https://reg-mirror.qiniu.com"
-      - "https://hub-mirror.c.163.com"
-EOF
+# sudo mkdir -p /etc/rancher/k3s
+# sudo cat >> /etc/rancher/k3s/registries.yaml <<EOF
+# mirrors:
+#   "docker.io":
+#     endpoint:
+#       - "https://8bfcfsp1.mirror.aliyuncs.com"
+#       - "https://bqr1dr1n.mirror.aliyuncs.com"
+#       - "https://rw21enj1.mirror.aliyuncs.com"
+#       - "https://vzv3mvs2.mirror.aliyuncs.com"
+#       - "https://z82hcd5r.mirror.aliyuncs.com"
+#       - "https://registry.cn-hangzhou.aliyuncs.com"
+# EOF

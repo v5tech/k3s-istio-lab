@@ -14,24 +14,18 @@ wget -q https://github.sfeng.workers.dev/https://github.com/k3s-io/k3s/releases/
 
 echo "[TASK 2] Config k3s registry"
 
-sudo mkdir -p /etc/rancher/k3s
-sudo cat >> /etc/rancher/k3s/registries.yaml <<EOF
-mirrors:
-  "docker.io":
-    endpoint:
-      - "https://8bfcfsp1.mirror.aliyuncs.com"
-      - "https://bqr1dr1n.mirror.aliyuncs.com"
-      - "https://rw21enj1.mirror.aliyuncs.com"
-      - "https://vzv3mvs2.mirror.aliyuncs.com"
-      - "https://z82hcd5r.mirror.aliyuncs.com"
-      - "https://registry.cn-hangzhou.aliyuncs.com"
-      - "https://docker.mirrors.ustc.edu.cn"
-      - "https://dockerhub.azk8s.cn"
-      - "https://quay.mirrors.ustc.edu.cn"
-      - "https://quay.azk8s.cn"
-      - "https://reg-mirror.qiniu.com"
-      - "https://hub-mirror.c.163.com"
-EOF
+# sudo mkdir -p /etc/rancher/k3s
+# sudo cat >> /etc/rancher/k3s/registries.yaml <<EOF
+# mirrors:
+#   "docker.io":
+#     endpoint:
+#       - "https://8bfcfsp1.mirror.aliyuncs.com"
+#       - "https://bqr1dr1n.mirror.aliyuncs.com"
+#       - "https://rw21enj1.mirror.aliyuncs.com"
+#       - "https://vzv3mvs2.mirror.aliyuncs.com"
+#       - "https://z82hcd5r.mirror.aliyuncs.com"
+#       - "https://registry.cn-hangzhou.aliyuncs.com"
+# EOF
 
 echo "[TASK 3] Install k3s"
 
@@ -42,7 +36,8 @@ mkdir -p /var/lib/rancher/k3s/agent/images/
 mv k3s-airgap-images-amd64.tar /var/lib/rancher/k3s/agent/images/
 curl -sfL https://get.k3s.io -o install.sh
 chmod +x install.sh
-INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_EXEC='--disable traefik' ./install.sh
+IP_ADDRESS=`ip addr | grep eth1 | grep inet | awk '{print $2}' | awk -F '/' '{print $1}'`
+INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_EXEC="--disable traefik --node-ip ${IP_ADDRESS} --tls-san ${IP_ADDRESS} --flannel-iface eth1 --write-kubeconfig-mode 644" ./install.sh
 
 echo "[TASK 4] Install kube-explorer"
 
@@ -50,7 +45,7 @@ wget -q https://github.sfeng.workers.dev/https://github.com/cnrancher/kube-explo
 mv kube-explorer-linux-amd64 kube-explorer
 chmod +x kube-explorer
 cp /etc/rancher/k3s/k3s.yaml /root/.kube/config
-sed -i 's/127.0.0.1/192.168.56.100/' /root/.kube/config
+sed -i 's/127.0.0.1/'${IP_ADDRESS}'/' /root/.kube/config
 nohup ./kube-explorer --kubeconfig=/root/.kube/config --http-listen-port=9898 --https-listen-port=0 >/dev/null 2>&1 &
 
 echo "[TASK 5] Kubectl completion bash"

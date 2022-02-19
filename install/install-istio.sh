@@ -1,6 +1,7 @@
 #!/bin/sh
 
 ISTIO_VERSION="1.12.3"
+IP_ADDRESS=`ip addr | grep eth1 | grep inet | awk '{print $2}' | awk -F '/' '{print $1}'`
 
 echo "下载 Istio"
 
@@ -16,6 +17,6 @@ export PATH=$PWD/bin:$PATH
 
 echo "安装 Istio"
 cp /etc/rancher/k3s/k3s.yaml /root/.kube/config
-sed -i 's/127.0.0.1/k3s1/' /root/.kube/config
+sed -i 's/127.0.0.1/'${IP_ADDRESS}'/' /root/.kube/config
 istioctl install --set profile=demo -y
 kubectl label namespace default istio-injection=enabled

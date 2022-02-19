@@ -16,11 +16,12 @@ wget -q https://github.sfeng.workers.dev/https://github.com/cnrancher/kube-explo
 mv kube-explorer-linux-amd64 kube-explorer
 chmod +x kube-explorer
 cp /etc/rancher/k3s/k3s.yaml /root/.kube/config
-sed -i 's/127.0.0.1/k3s1/' /root/.kube/config
+IP_ADDRESS=`ip addr | grep eth1 | grep inet | awk '{print $2}' | awk -F '/' '{print $1}'`
+sed -i 's/127.0.0.1/'${IP_ADDRESS}'/' /root/.kube/config
 nohup ./kube-explorer --kubeconfig=/root/.kube/config --http-listen-port=9898 --https-listen-port=0 >/dev/null 2>&1 &
 ```
 
-浏览器访问 http://k3s1:9898
+浏览器访问 http://${IP_ADDRESS}:9898
 
 设置`Kubectl Completion Bash`
 
