@@ -20,7 +20,7 @@ Vagrant.configure(2) do |config|
   
     node.vm.provider :virtualbox do |v|
       v.name    = "k3s1"
-      v.memory  = 2048
+      v.memory  = 8192
       v.cpus    = 2
     end
 
@@ -29,7 +29,7 @@ Vagrant.configure(2) do |config|
   end
 
   # K3s Worker Nodes
-  NodeCount = 1
+  NodeCount = 2
 
   (1..NodeCount).each do |i|
 
@@ -44,7 +44,7 @@ Vagrant.configure(2) do |config|
 
       node.vm.provider :virtualbox do |v|
         v.name    = "k3s#{i+1}"
-        v.memory  = 2048
+        v.memory  = 8192
         v.cpus    = 2
       end
 
